@@ -1,0 +1,342 @@
+:root {
+  --primary-color: #00199c;
+  --primary-color-backdrop: rgba(0, 25, 156, 0.5);
+  --secondary-color: #d9d9d9;
+  --flex-gap: 10%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - 20px);
+  height: 50px;
+  border-bottom: solid 2px white;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  transition: all 0.5s;
+}
+.inverted {
+  border-bottom: solid 0px white;
+  background: var(--primary-color);
+  transition: all 0.5s;
+}
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.hero {
+  background-image: url("../assets/Rectangle 3.png");
+  background-color: var(--primary-color-backdrop);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  color: white;
+}
+.container-hero {
+  padding: 100px;
+}
+.hero-text h1,
+h4 {
+  margin: 0 !important;
+}
+.hero-text {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.reservation-bar {
+  border: solid 5px white;
+  border-radius: 30px;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-direction: row;
+  user-select: none;
+}
+.reservation-bar div {
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 20px;
+}
+.b-right {
+  border-right: solid 5px white;
+}
+.content {
+  margin: 0 !important;
+  padding: 5px;
+  padding-right: 20px;
+  cursor: pointer;
+}
+.content h4 {
+  font-weight: 400;
+}
+.reservation-bar button {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border-radius: 30px;
+  border: solid 0px transparent;
+  background: transparent;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.5s;
+}
+.reservation-bar input {
+  background: none;
+  border: solid 0px transparent;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+.reservation-bar ::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+.reservation-bar p {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+.input-default {
+  font-size: 18px;
+  font-family: "Inter", sans-serif;
+  border: solid 3px var(--primary-color);
+  border-radius: 30px;
+  padding: 10px;
+  margin: 10px 0 10px 0;
+}
+.button-default {
+  border-radius: 30px;
+  border: solid 0px white;
+  background: var(--primary-color);
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  padding: 10px;
+}
+.button-default-outline {
+  border-radius: 30px;
+  border: solid 2px var(--primary-color);
+  background: transparent;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--primary-color);
+  padding: 10px;
+  transition: all 0.5s;
+}
+.button-default-outline:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.5s;
+}
+.button-white-outline {
+  border-radius: 30px;
+  border: solid 2px white;
+  background: transparent;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  padding: 10px;
+  transition: all 0.5s;
+}
+.button-white-outline:hover {
+  background-color: white;
+  color: black;
+  transition: all 0.5s;
+}
+dialog {
+  border: solid 0 transparent;
+  border-radius: 30px;
+  padding: 30px;
+}
+dialog b {
+  font-size: 30px;
+}
+dialog p {
+  margin: 0;
+}
+dialog input {
+  width: fit-content;
+}
+dialog form {
+  text-align: center;
+}
+hr {
+  border: solid 0px var(--primary-color);
+}
+.wrapper {
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+.section1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 0px;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.div2 {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.img-res {
+  width: 100%;
+  border-radius: 10px;
+}
+.reservation-mobile {
+  background: var(--secondary-color);
+  padding: 20px;
+  display: none;
+  border-radius: 30px;
+}
+@media (max-width: 1130px) {
+  .reservation-bar {
+    display: none;
+  }
+  .section1 {
+    display: block;
+  }
+  .section1 div {
+    margin-bottom: 20px;
+  }
+  .reservation-mobile {
+    display: block;
+  }
+  .section-column-container {
+    display: block !important;
+  }
+  .room-card {
+    display: block !important;
+    text-align: center;
+  }
+  .room-card img {
+    width: 100% !important;
+  }
+  .room-card button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .selector { 
+    width: calc(100% - 40px) !important;
+  }
+}
+.w-100 {
+  width: 100%;
+}
+.datesContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: left;
+  align-items: flex-start;
+  align-content: flex-start;
+  overflow: auto;
+  flex-direction: row;
+  gap: 12px;
+  font-size: 24px;
+}
+.datesContainer div {
+  width: 100%;
+  margin-right: 5px;
+}
+.datesContainer input {
+  width: calc(100% - 5px);
+  border: solid 0px transparent;
+  font-family: "Inter", sans-serif;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: transparent;
+}
+.section-column {
+  flex: 33.33%;
+  height: 200px;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+}
+.section-column-container {
+  display: flex;
+}
+footer {
+  background-color: var(--secondary-color);
+  padding: 20px;
+}
+
+.footer-columns {
+  display: flex;
+}
+
+.footer-column {
+  flex: 1;
+}
+.selector {
+  background-color: var(--secondary-color);
+  width: var(--flex-gap);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--flex-gap);
+  padding: 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+}
+.room-card {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  background: var(--secondary-color);
+  border-radius: 30px;
+  padding: 20px;
+  margin: 20px 0 20px 0px;
+  align-items: center;
+}
+.room-card img {
+  width: 250px;
+  height: 170px;
+  border-radius: 30px;
+  object-fit: cover;
+}
+.room-card-section1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.room-card-section2 {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.room-card-section3 {
+  grid-area: 1 / 3 / 2 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.form input[type="text"], .form select, .form button {
+  width: -webkit-fill-available;
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Hotel El Horizonte del llano</title>
+</head>
+
+<body>
+    <header class="fixed-header">
+        <div class="logo">Hotel El Horizonte del llano</div>
+        <button class="button-white-outline">Ingresar</button>
+    </header>
+    <div class="hero">
+        <div class="container-hero">
+            <div class="hero-text">
+                <h4>Descubre</h4>
+                <h1>Acacias, Meta</h1>
+            </div>
+            <div class="reservation-bar">
+                <div class="b-right">
+                    <div class="content">
+                        <h4>Entrada</h4>
+                        <input type="date" class="reservation-datepicker" id="start-date" />
+                    </div>
+                </div>
+                <div class="b-right">
+                    <div class="content">
+                        <h4>Salida</h4>
+                        <input type="date" class="reservation-datepicker" id="end-date" />
+                    </div>
+
+                </div>
+                <div class="b-right">
+                    <div class="content">
+                        <h4>Habitaciones</h4>
+                        <p id="rooms">1</p>
+                    </div>
+
+                </div>
+                <div class="end-button">
+                    <div class="content">
+                        <h4>Ocupación</h4>
+                        <p id="ocp">1-0-0</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="content">
+                        <button>Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="reservation-mobile">
+            <div class="datesContainer">
+                <div>
+                    <h4>Entrada</h4>
+                    <input type="date" onfocus="this.showPicker()" class="reservation-datepicker"
+                        id="start-date-mobile" />
+                </div>
+                <div>
+                    <h4>Salida</h4>
+                    <input type="date" onfocus="this.showPicker()" class="reservation-datepicker"
+                        id="end-date-mobile" />
+                </div>
+            </div>
+            <h4>Habitaciones</h4>
+            <p id="rooms-mobile">1</p>
+            <h4>Ocupación</h4>
+            <p id="ocp-mobile">1-0-0</p>
+            <button class="button-default w-100">Buscar</button>
+        </div>
+        <div class="section1">
+            <div class="div1">
+                <h2>¡Ven y disfruta de una experiencia única!</h2>
+                <p>
+                    Situado en una de las áreas más hermosas y tranquilas de la zona rural de Acacias, nuestro hotel es
+                    el lugar
+                    perfecto para aquellos que buscan escapar del bullicio de la ciudad y sumergirse en la naturaleza.
+                    Rodeado
+                    de exuberantes paisajes naturales, nuestro hotel es el lugar ideal para relajarse y disfrutar de la
+                    tranquilidad.
+                </p>
+                <button class="button-default-outline">Reserva ya!</button>
+            </div>
+            <div class="div2">
+                <img src="static/assets/acacias-696x459.png" class="img-res" alt="" srcset="">
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <h1>Comodidades</h1>
+            <p>Nuestro hotel, busca resaltar las mejores comodidades, para que puedas desconectarte de tu entorno y
+                disfrutar de tus vacaciones o viajes. </p>
+            <div class="section-column-container">
+                <div class="section-column">
+                    <img src="static/assets/estacionamiento.png" alt="" srcset="">
+                    <p>Parqueadero</p>
+                </div>
+                <div class="section-column">
+                    <img src="static/assets/plato.png" alt="" srcset="">
+                    <p>Restaurante</p>
+                </div>
+                <div class="section-column">
+                    <img src="static/assets/piscina.png" alt="" srcset="">
+                    <p>Piscina</p>
+                </div>
+                <div class="section-column">
+                    <img src="static/assets/senal-wifi.png" alt="" srcset="">
+                    <p>WiFi gratuito</p>
+                </div>
+            </div>
+        </div>
+        <h1 style="text-align: center;">ACACIAS META - La perla Llanera</h1>
+        <a href="https://www.youtube.com/watch?v=-WEADKAtS1A" target="_blank">
+            <img class="img-res" src="static/assets/screenshot-video.png" alt="" srcset="">
+        </a>
+    </div>
+    <footer>
+        <div class="footer-columns">
+            <div class="footer-column">
+                <img src="static/assets/sellos.png" width="50%" alt="" srcset="">
+            </div>
+            <div class="footer-column">
+                <h3>Ubicación</h3>
+                <p>Acacias, Meta</p>
+            </div>
+        </div>
+    </footer>
+    <dialog id="occupients">
+        <form>
+            <label>
+                <b>Número de Habitaciones</b>
+                <br>
+                <input type="number" class="input-default" id="num-hab" min="1" value="1">
+            </label>
+
+            <label>
+                <p>Número de Adultos</p>
+                <input type="number" class="input-default" id="num-adults" min="1" value="1">
+            </label>
+            <label>
+                <p>Número de niños
+                </p>
+                <input type="number" class="input-default" name="" value="0" min="0" id="num-kids">
+            </label>
+            <label for="">
+                <p>Número de bebés
+                </p>
+                <input type="number" class="input-default" value="0" name="" min="0" id="num-babies">
+            </label>
+            </p>
+            <div>
+                <button class="button-default" value="cancel" formmethod="dialog">Aplicar</button>
+            </div>
+        </form>
+    </dialog>
+    <script src="static/js/index.js"></script>
+</body>
+
+</html>

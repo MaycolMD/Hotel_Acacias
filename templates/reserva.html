@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Hotel El Horizonte del llano</title>
+</head>
+
+<body>
+    <header class="fixed-header">
+        <div class="logo">Hotel El Horizonte del llano</div>
+        <button class="button-white-outline">Ingresar</button>
+    </header>
+    <div class="hero">
+        <div class="container-hero">
+            <h2>Tu reserva</h2>
+            <div class="reservation-bar" style="display: none;">
+                <div class="b-right">
+                    <div class="content">
+                        <h4>Entrada</h4>
+                        <input type="date" class="reservation-datepicker" id="start-date" />
+                    </div>
+                </div>
+                <div class="b-right">
+                    <div class="content">
+                        <h4>Salida</h4>
+                        <input type="date" class="reservation-datepicker" id="end-date" />
+                    </div>
+
+                </div>
+                <div class="b-right">
+                    <div class="content">
+                        <h4>Habitaciones</h4>
+                        <p id="rooms">1</p>
+                    </div>
+
+                </div>
+                <div class="end-button">
+                    <div class="content">
+                        <h4>Ocupación</h4>
+                        <p id="ocp">1-0-0</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="content">
+                        <button>Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="reservation-mobile" style="display: none;">
+            <div class="datesContainer">
+                <div>
+                    <h4>Entrada</h4>
+                    <input type="date" onfocus="this.showPicker()" class="reservation-datepicker"
+                        id="start-date-mobile" />
+                </div>
+                <div>
+                    <h4>Salida</h4>
+                    <input type="date" onfocus="this.showPicker()" class="reservation-datepicker"
+                        id="end-date-mobile" />
+                </div>
+            </div>
+            <h4>Habitaciones</h4>
+            <p id="rooms-mobile">1</p>
+            <h4>Ocupación</h4>
+            <p id="ocp-mobile">1-0-0</p>
+            <button class="button-default w-100">Buscar</button>
+        </div>
+        <form action="#" class="form">
+            <label for="nombre">Nombre:</label>
+            <br>
+            <input class="input-default"  type="text" id="nombre" name="nombre" required>
+            <br>
+            <label for="apellido">Apellido:</label>
+            <br>
+            <input class="input-default"  type="text" id="apellido" name="apellido" required>
+            <br>
+            <label for="habitacion">Tipo de Habitación:</label>
+            <br>
+            <select class="input-default" id="habitacion" name="habitacion" required>
+                <option value="simple">Simple</option>
+                <option value="doble">Doble</option>
+                <option value="compartida">Compartida</option>
+            </select>
+            <br>
+            <label>Servicios Adicionales:</label>
+            <br>
+            <label for="parqueadero"><input class="input-default"  type="checkbox" id="parqueadero" name="servicios[]" value="parqueadero">
+            Reserva de Parqueadero</label>
+            <br>
+            <label for="transporte"><input class="input-default"  type="checkbox" id="transporte" name="servicios[]" value="transporte">
+            Transporte al Pueblo</label>
+            <br>
+            <label for="restaurante"><input class="input-default"  type="checkbox" id="restaurante" name="servicios[]" value="restaurante">
+            Servicio de Restaurante</label>
+            <br>
+            <label for="lavanderia"><input class="input-default"  type="checkbox" id="lavanderia" name="servicios[]" value="lavanderia">
+            Servicio de Lavandería</label>
+            <br>
+            <label for="guia"><input class="input-default"  type="checkbox" id="guia" name="servicios[]" value="guia">
+            Servicio de Guía</label>
+
+            <button class="button-default">Enviar</button>
+        </form>
+    </div>
+    <footer>
+        <div class="footer-columns">
+            <div class="footer-column">
+                <img src="static/assets/sellos.png" width="50%" alt="" srcset="">
+            </div>
+            <div class="footer-column">
+                <h3>Ubicación</h3>
+                <p>Acacias, Meta</p>
+            </div>
+        </div>
+    </footer>
+    <dialog id="currency">
+    </dialog>
+    <dialog id="occupients">
+        <form>
+            <label>
+                <b>Número de Habitaciones</b>
+                <br>
+                <input class="input-default"  type="number" class="input-default" id="num-hab" min="1" value="1">
+            </label>
+
+            <label>
+                <p>Número de Adultos</p>
+                <input class="input-default"  type="number" class="input-default" id="num-adults" min="1" value="1">
+            </label>
+            <label>
+                <p>Número de niños
+                </p>
+                <input class="input-default"  type="number" class="input-default" name="" value="0" min="0" id="num-kids">
+            </label>
+            <label for="">
+                <p>Número de bebés
+                </p>
+                <input class="input-default"  type="number" class="input-default" value="0" name="" min="0" id="num-babies">
+            </label>
+            </p>
+            <div>
+                <button class="button-default" value="cancel" formmethod="dialog">Aplicar</button>
+            </div>
+        </form>
+    </dialog>
+    <script src="static/js/index.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
