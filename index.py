@@ -14,7 +14,7 @@ mysql = MySQL(app)
 
 # Validate case of armed strike
 cur = mysql.connection.cursor()
-cur.execute("SELECT Inicio, Fin FROM tabla_paros")
+cur.execute("SELECT fechaInicio, fechaFin FROM tabla_paros")
 data = cur.fetchall()
 paro_activo = False
 # Convertir todas las fechas en objetos datetime
@@ -56,7 +56,7 @@ def guardar_json_paro():
 
     # Guardar los valores en la base de datos
     cur = mysql.connection.cursor()
-    query = "INSERT INTO tu_tabla (fechaInicio, fechaFin, contexto) VALUES (%s, %s, %s)"
+    query = "INSERT INTO tabla_paros (fechaInicio, fechaFin, contexto) VALUES (%s, %s, %s)"
     cur.execute(query, (fecha_inicio, fecha_fin, contexto))
     mysql.connection.commit()
     cur.close()
