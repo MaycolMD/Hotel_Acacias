@@ -2,6 +2,7 @@ import datetime
 import json
 
 import pymysql
+from Huesped import Huesped
 
 from habitacion import Habitacion
 from Paro import Paro
@@ -50,7 +51,7 @@ class DATABASE:
     def show_habitaciones_disponibles(self, f_in, f_out):
         query = f"""SELECT MIN(ID_HABITACION), TIPO
                     FROM INVENTARIO_HABITACION
-                    WHERE NOT `ID_HABITACION` IN 
+                    WHERE NOT `ID_HABITACION` IN
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
@@ -205,12 +206,24 @@ class DATABASE:
             paros = self.cursor.fetchall()
             responseArray = []
             for paro in paros:
-                par = Paro(paro[0],paro[1],paro[2])
+                par = Paro(paro[0], paro[1], paro[2])
                 responseArray.append(par)
             return responseArray
         except Exception as e:
             raise
 
+    def getHuespedes(self):
+        query = "SELECT NOMBRES, APELLIDOS, NACIONALIDAD, ORIGEN, ID_CLIENTE from reservas"
+        try:
+            self.cursor.execute(query)
+            huespedes = self.cursor.fetchall()
+            responseArray = []
+            for huesped in huespedes:
+                guest = Huesped(huesped[0], huesped[1],huesped[2], huesped[3], huesped[4])
+                responseArray.append(guest)
+            return responseArray
+        except Exception as e:
+            raise
     def verificar_disponibilidad_restaurante(self, hora, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_MESA)
                     FROM RESTAURANTE
