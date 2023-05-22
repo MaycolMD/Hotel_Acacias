@@ -12,9 +12,34 @@ app.config["MYSQL_DB"] = "database"
 
 mysql = MySQL(app)
 
+
+
 # Validate case of armed strike
+def verificar_disponibilidad_paro_armado(self, f_inicio, f_fin):
+    query = f"SELECT inicio, fin FROM paros"
+
+    try:
+        self.cursor.execute(query)
+        paros = self.cursor.fetchall()
+        paro_activo = False
+
+        for fecha_inicio, fecha_fin in paros:
+            f_I = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+            f_F = datetime.strptime(fecha_fin, "%Y-%m-%d")
+            # Hacer un between para validar que la fecha no esté en el paro armado
+            if f_I <= f_inicio <= f_F: paro_activo = True
+            if f_I <= f_fin <= f_F: paro_activo = True
+
+        if paro_activo:
+            print("No hay disponibilidad")
+        else:
+            print("Disponible")
+    except Exception as e:
+        raise
+
+
 cur = mysql.connection.cursor()
-cur.execute("SELECT Inicio, Fin FROM tabla_paros")
+cur.execute("SELECT inicio, fin FROM paros")
 data = cur.fetchall()
 paro_activo = False
 # Convertir todas las fechas en objetos datetime
