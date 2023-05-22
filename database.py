@@ -283,10 +283,7 @@ class DATABASE:
                 if f_I <= f_inicio <= f_F: paro_activo = True
                 if f_I <= f_fin <= f_F: paro_activo = True
 
-            if paro_activo:
-                print("No hay disponibilidad")
-            else:
-                print("Disponible")
+            return paro_activo
         except Exception as e:
             raise
 
