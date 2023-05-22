@@ -68,7 +68,7 @@ class DATABASE:
             raise
 
     # Versión general de las 3 funciones de abajo
-    def verificar_disponibilidad_habitacion(self, tipo, f_in, f_out):
+    def verificar_disponibilidad_habitacion(self, tipo, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_HABITACION)
                     FROM INVENTARIO_HABITACION
                     WHERE ID_HABITACION IN
@@ -82,19 +82,19 @@ class DATABASE:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
             if tipo == "Uso compartido":
-                if rooms[0][0] >= 10:
+                if rooms[0][0] >= 10 - cantidad + 1:
                     print("No hay disponibilidad")
                 else:
                     print("Disponible")
             elif tipo == "Simple" | tipo == "Doble":
-                if rooms[0][0] >= 15:
+                if rooms[0][0] >= 15 - cantidad + 1:
                     print("No hay disponibilidad")
                 else:
                     print("Disponible")
         except Exception as e:
             raise
 
-    def verificar_disponibilidad_uso_compartido(self, f_in, f_out):
+    def verificar_disponibilidad_uso_compartido(self, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_HABITACION)
                     FROM INVENTARIO_HABITACION
                     WHERE ID_HABITACION IN
@@ -108,14 +108,14 @@ class DATABASE:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
 
-            if rooms[0][0] >= 10:
+            if rooms[0][0] >= 10 - cantidad + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
         except Exception as e:
             raise
 
-    def verificar_disponibilidad_simple(self, f_in, f_out):
+    def verificar_disponibilidad_simple(self, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_HABITACION)
                     FROM INVENTARIO_HABITACION
                     WHERE ID_HABITACION IN
@@ -129,14 +129,14 @@ class DATABASE:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
 
-            if rooms[0][0] >= 15:
+            if rooms[0][0] >= 15 - cantidad + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
         except Exception as e:
             raise
 
-    def verificar_disponibilidad_doble(self, f_in, f_out):
+    def verificar_disponibilidad_doble(self, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_HABITACION)
                     FROM INVENTARIO_HABITACION
                     WHERE ID_HABITACION IN
@@ -150,7 +150,7 @@ class DATABASE:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
 
-            if rooms[0][0] >= 15:
+            if rooms[0][0] >= 15 - cantidad + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -211,7 +211,7 @@ class DATABASE:
         except Exception as e:
             raise
 
-    def verificar_disponibilidad_restaurante(self, hora, f_in, f_out):
+    def verificar_disponibilidad_restaurante(self, hora, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_MESA)
                     FROM RESTAURANTE
                     WHERE ID_MESA IN
@@ -225,7 +225,7 @@ class DATABASE:
             self.cursor.execute(query)
             mesa = self.cursor.fetchall()
 
-            if mesa[0][0] >= 40:
+            if mesa[0][0] >= 40 - cantidad + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -233,7 +233,7 @@ class DATABASE:
             raise
     
     # Hora esta en el formato datetime (YY-MM-DD HH-MM-SS)
-    def verificar_disponibilidad_transporte(self, hora):
+    def verificar_disponibilidad_transporte(self, hora, cantidad):
         query = f"""SELECT COUNT(ID_BUS)
                     FROM TRANSPORTE
                     WHERE ID_BUS IN
@@ -246,7 +246,7 @@ class DATABASE:
             self.cursor.execute(query)
             asiento = self.cursor.fetchall()
 
-            if asiento[0][0] >= 20:
+            if asiento[0][0] >= 20 - cantidad + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
