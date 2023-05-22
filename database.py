@@ -1,9 +1,10 @@
 import datetime
 import json
+
 import pymysql
-from Paro import Paro
 
 from habitacion import Habitacion
+from Paro import Paro
 from reserva import Reserva
 from response import Response
 
@@ -80,11 +81,16 @@ class DATABASE:
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
-
-            if rooms[0][0] >= 10:
-                print("No hay disponibilidad")
-            else:
-                print("Disponible")
+            if tipo == "Uso compartido":
+                if rooms[0][0] >= 10:
+                    print("No hay disponibilidad")
+                else:
+                    print("Disponible")
+            elif tipo == "Simple" | tipo == "Doble":
+                if rooms[0][0] >= 15:
+                    print("No hay disponibilidad")
+                else:
+                    print("Disponible")
         except Exception as e:
             raise
 
@@ -213,13 +219,34 @@ class DATABASE:
                         FROM RESERVAS R CROSS JOIN RESTAURANTE RE
                         ON R.ID_RESERVA = RE.ID_RESERVA
                         AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
-                        AND HORARIO = "{hora}");"""
+                        AND RE.HORARIO = "{hora}");"""
 
         try:
             self.cursor.execute(query)
-            park = self.cursor.fetchall()
+            mesa = self.cursor.fetchall()
 
-            if park[0][0] >= 40:
+            if mesa[0][0] >= 40:
+                print("No hay disponibilidad")
+            else:
+                print("Disponible")
+        except Exception as e:
+            raise
+    
+    # Hora esta en el formato datetime (YY-MM-DD HH-MM-SS)
+    def verificar_disponibilidad_transporte(self, hora):
+        query = f"""SELECT COUNT(ID_BUS)
+                    FROM TRANSPORTE
+                    WHERE ID_BUS IN
+                        (SELECT B.`ID_BUS`
+                        FROM RESERVAS R CROSS JOIN TRANSPORTE B
+                        ON R.ID_RESERVA = B.ID_RESERVA
+                        AND B.HORARIO = "{hora}");"""
+
+        try:
+            self.cursor.execute(query)
+            asiento = self.cursor.fetchall()
+
+            if asiento[0][0] >= 20:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
