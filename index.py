@@ -2,16 +2,11 @@ from flask import Flask, jsonify, render_template, request
 from flask_mysqldb import MySQL
 from datetime import datetime
 import json
+from flask_cors import CORS
 from database import DATABASE
 from response import Response
 app = Flask(__name__)
-
-# Required
-#app.config["MYSQL_USER"] = "user"
-#app.config["MYSQL_PASSWORD"] = "password"
-#app.config["MYSQL_DB"] = "database"
-
-#mysql = MySQL(app)
+CORS(app)
 
 
 # Página principal
@@ -77,6 +72,20 @@ def reservas():
         response = Response("failed", [], "Error al comunicarse con la DB")
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
+@app.route('/api/huespedes')
+def huespedes():
+    db = DATABASE()
+    try:
+        huespedes = db.getHuespedes()
+        if len(huespedes) > 0:
+            response = Response("ok", huespedes, "")
+        else:
+            response = Response(
+                "failed", [], "No hay huespedes")
+    except:
+        response = Response("failed", [], "Error al comunicarse con la DB")
+    return json.dumps(response, default=vars), {"Content-Type": "application/json"}
+
 @app.route('/api/reservasActivas')
 def reservasActivas():
     db = DATABASE()
@@ -90,27 +99,6 @@ def reservasActivas():
     except:
         response = Response("failed", [], "Error al comunicarse con la DB")
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
-
-# Guardar paro armado desde JSON de la petición
-# @app.route('/guardar_json_paro', methods=['POST'])
-# def guardar_json_paro():
-    # Obtener el JSON
-#    data = request.get_json()
-
-    # Extraer los valores de fechaInicio, fechaFin y contexto del JSON
-#    fecha_inicio = data['fechaInicio']
-#    fecha_fin = data['fechaFin']
-#    contexto = data['contexto']
-
-    # Guardar los valores en la base de datos
-#    cur = mysql.connection.cursor()
-#    query = "INSERT INTO tabla_paros (fechaInicio, fechaFin, contexto) VALUES (%s, %s, %s)"
-#    cur.execute(query, (fecha_inicio, fecha_fin, contexto))
-#    mysql.connection.commit()
-#    cur.close()
-
-#    return 'JSON guardado en la base de datos'
-
 
 if __name__ == '__main__':
     app.run(debug=True)
