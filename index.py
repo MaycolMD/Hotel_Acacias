@@ -100,5 +100,28 @@ def reservasActivas():
         response = Response("failed", [], "Error al comunicarse con la DB")
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
+@app.route('/api/buscador')
+def buscador():
+    tipo = request.args.get('tipo')  
+    fechaInicio = request.args.get('fechaInicio') 
+    fechaFin = request.args.get('fechaFin') 
+    adultos = int(request.args.get('adultos')) 
+    niños = int(request.args.get('niños'))  
+    bebes = int(request.args.get('bebes')) 
+    habitaciones = int(request.args.get('habitaciones'))  
+    
+    db = DATABASE()
+    huespedes = adultos + niños + bebes
+    try:
+        rooms = db.getHabitaciones(tipo, fechaInicio, fechaFin, huespedes, habitaciones)
+        if len(rooms) > 0:
+            response = Response("ok", rooms, "")
+        else:
+            response = Response(
+                "failed", [], "No hay habitaciones")
+    except:
+        response = Response("failed", [], "Error al comunicarse con la DB")
+    return json.dumps(response, default=vars), {"Content-Type": "application/json"}
+
 if __name__ == '__main__':
     app.run(debug=True)

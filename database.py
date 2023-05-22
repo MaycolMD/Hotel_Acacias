@@ -8,12 +8,13 @@ from habitacion import Habitacion
 from Paro import Paro
 from reserva import Reserva
 from response import Response
+from Room import Room
 
 
 class DATABASE:
     def __init__(self):
         self.connection = pymysql.connect(
-            host="localhost", user="root", password="", db="hotel_acacias"
+            host="localhost", user="root", password="maycol", db="hotel_acacias"
         )
 
         self.cursor = self.connection.cursor()
@@ -286,6 +287,37 @@ class DATABASE:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
+        except Exception as e:
+            raise
+
+        # Buscador
+    def getHabitaciones(self, tipo, f_in, f_out, huespedes, habitaciones):
+        query = f"""SELECT *
+                    FROM hotel_acacias.INVENTARIO_HABITACION
+                    WHERE ID_HABITACION NOT IN
+                        (SELECT I.`ID_HABITACION`
+                        FROM hotel_acacias.RESERVAS R CROSS JOIN hotel_acacias.INVENTARIO_HABITACION I
+                        ON R.ID_HABITACION = I.ID_HABITACION
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        AND TIPO = "{tipo}")
+                    AND TIPO = "{tipo}";"""
+
+        try:
+            self.cursor.execute(query)
+            rooms = self.cursor.fetchall()
+            if tipo == "Simple" and huespedes > habitaciones:
+                print('No hay suficientes habitaciones de cama simple para los huespedes')
+            elif tipo == "Doble" and huespedes >= habitaciones*2:
+                print('No hay suficientes habitaciones de cama doble para los huespedes')
+            else:
+                if len(rooms) > habitaciones:
+                    responseArray = []
+                    for room in rooms:
+                        res = Room(room[0], room[1], room[2], room[3])
+                        responseArray.append(res)
+                    return responseArray
+                else:
+                    print('No hay suficientes habitaciones disponibles')
         except Exception as e:
             raise
 
