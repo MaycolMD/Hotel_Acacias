@@ -450,41 +450,146 @@ class DATABASE:
         except Exception as e:
             raise
     
-    def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad, hora, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS):
-        if(self.verificar_disponibilidad_habitacion(self, tipo, f_in, f_out, cantidad)):
-            print("éxito con la habitación")
-            if(self.verificar_disponibilidad_paro_armado(self, f_in, f_out) == False):
-                print("puede continuar, no hay paro armado")
-                if(self.verificar_disponibilidad_parqueadero(self, f_in, f_out)):
-                    print("éxito con el parqueadero")
-                    if(self.verificar_disponibilidad_transporte(self, hora, cantidad)):
-                        print("éxito con el transporte")
-                        if(self.verificar_disponibilidad_restaurante(self, hora, f_in, f_out, cantidad)):
-                            print("éxito con el restaurante")
-                            query = f"""INSERT INTO RESERVAS
-                                        (ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, FECHA_CHECKIN, FECHA_CHECKOUT)
-                                        VALUES
-                                        ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
-                            try:
-                                # Create a cursor object to execute SQL queries
-                                cursor = self.connection.cursor()
+    def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad_habitacion, cantidad_restaurante, cantidad_transporte, hora_restaurante, hora_bus, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, parqueadero, restaurante, transporte):
+        if(not self.verificar_disponibilidad_habitacion(tipo, f_in, f_out, cantidad_habitacion)):
+            print("No hay habitaciones disponibles")
+            return
+        
+        if(self.verificar_disponibilidad_paro_armado(f_in, f_out)):
+            print("Hay paro armado")
+            return    
 
-                                # SQL statement to insert the strike alert into the database
-                                print("éxito con el restaurante")
-                                query = f"""INSERT INTO RESERVAS
-                                        (ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, FECHA_CHECKIN, FECHA_CHECKOUT)
-                                        VALUES
-                                        ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
-                                # Execute the SQL statement with the provided parameters
-                                cursor.execute(query)
+        query = f"""INSERT INTO RESERVAS
+                    (ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, FECHA_CHECKIN, FECHA_CHECKOUT)
+                    VALUES
+                    ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
+        try:
+            self.cursor.execute(query)
+            self.connection.commit()
+        except Exception as e:
+            raise
 
-                                # Commit the changes to the database
-                                self.connection.commit()
+        query2 = f"""SELECT LAST_INSERT_ID(`ID_RESERVA`)
+                     FROM RESERVAS
+                     WHERE `NOMBRES` = "{NOMBRES}";"""
+        
+        try:
+            self.cursor.execute(query2)
+            id_r = self.cursor.fetchall()
+            id_reserva = id_r[0][0]
+        except Exception as e:
+            raise
 
-                                return Response("ok", [], "")
+        self.ingresar_datos_parqueadero(id_reserva, f_in, f_out, parqueadero)
+        self.ingresar_datos_restaurante(id_reserva, hora_restaurante, f_in, f_out, cantidad_restaurante, restaurante)
+        self.ingresar_datos_transporte(id_reserva, hora_bus, cantidad_transporte, transporte)
 
-                            except pymysql.Error as e:
-                                return Response("ok", [], "Error al registrar la reserva: " + e)
+    def ingresar_datos_parqueadero(self, id_reserva, f_in, f_out, check):
+        if(not check):
+            return
+        
+        if(not self.verificar_disponibilidad_parqueadero(f_in, f_out)):
+            query2 = f"""DELETE FROM RESERVAS
+                         WHERE `ID_RESERVA` = {id_reserva};"""
+            try:
+                self.cursor.execute(query2)
+                self.connection.commit()
+            except Exception as e:
+                raise
+
+            print("No hay parqueaderos disponibles")
+            return
+        
+        query = f"""INSERT INTO PARQUEADERO
+                    (ID_RESERVA)
+                    VALUES
+                    ({id_reserva});"""
+        
+        try:
+            self.cursor.execute(query)
+            self.connection.commit()
+        except Exception as e:
+            raise
+
+    def ingresar_datos_restaurante(self, id_reserva, horario, f_in, f_out, cantidad, check):
+        if(not check):
+            return
+        
+        if(not self.verificar_disponibilidad_restaurante(horario, f_in, f_out, cantidad)):
+            query2 = f"""DELETE FROM RESERVAS
+                         WHERE `ID_RESERVA` = {id_reserva};"""
+            try:
+                self.cursor.execute(query2)
+                self.connection.commit()
+            except Exception as e:
+                raise
+
+            query3 = f"""DELETE FROM PARQUEADERO
+                         WHERE `ID_RESERVA` = {id_reserva};"""
+            try:
+                self.cursor.execute(query3)
+                self.connection.commit()
+            except Exception as e:
+                raise
+
+            print("No hay asientos en el restaurante disponibles")
+            return
+        
+        query = f"""INSERT INTO RESTAURANTE
+                    (HORARIO, ID_RESERVA)
+                    VALUES
+                    ({horario},{id_reserva});"""
+        
+        try:
+            for i in range(cantidad):
+                self.cursor.execute(query)
+                self.connection.commit()
+        except Exception as e:
+            raise
+
+    def ingresar_datos_transporte(self, id_reserva, horario, cantidad, check):
+        if(not check):
+            return
+        
+        if(not self.verificar_disponibilidad_transporte(horario, cantidad)):
+            query2 = f"""DELETE FROM RESERVAS
+                         WHERE `ID_RESERVA` = {id_reserva};"""
+            try:
+                self.cursor.execute(query2)
+                self.connection.commit()
+            except Exception as e:
+                raise
+
+            query3 = f"""DELETE FROM PARQUEADERO
+                         WHERE `ID_RESERVA` = {id_reserva};"""
+            try:
+                self.cursor.execute(query3)
+                self.connection.commit()
+            except Exception as e:
+                raise
+
+            query4 = f"""DELETE FROM RESTAURANTE
+                         WHERE `ID_RESERVA` = {id_reserva};"""
+            try:
+                self.cursor.execute(query4)
+                self.connection.commit()
+            except Exception as e:
+                raise
+
+            print("No hay asientos en el bus disponibles")
+            return
+        
+        query = f"""INSERT INTO TRANSPORTE
+                    (HORARIO, ID_RESERVA)
+                    VALUES
+                    ({horario},{id_reserva});"""
+        
+        try:
+            for i in range(cantidad):
+                self.cursor.execute(query)
+                self.connection.commit()
+        except Exception as e:
+            raise
 
     def close(self):
         self.connection.close()
