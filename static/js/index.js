@@ -69,7 +69,6 @@ document.querySelector('.reservation-bar').querySelector('button').addEventListe
     window.location = dir;
 })
 
-
   
 
 
