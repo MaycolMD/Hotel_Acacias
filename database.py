@@ -13,7 +13,7 @@ from Room import Room
 class DATABASE:
     def __init__(self):
         self.connection = pymysql.connect(
-            host="localhost", user="root", password="", db="hotel_acacias"
+            host="localhost", user="root", password="maycol", db="hotel_acacias"
         )
 
         self.cursor = self.connection.cursor()
@@ -352,22 +352,33 @@ class DATABASE:
             rooms = self.cursor.fetchall()
             if tipo == "Simple" and huespedes > habitaciones:
                 print('No hay suficientes habitaciones de cama simple para los huespedes')
-            elif tipo == "Doble" and huespedes >= habitaciones*2:
+            elif tipo == "Doble" and huespedes > habitaciones*2:
                 print('No hay suficientes habitaciones de cama doble para los huespedes')
             else:
-                if len(rooms) > habitaciones:
-                    responseArray = []
-                    if tipo == "Seleccionar tipo":
+                responseArray = []
+                if tipo == "Seleccionar tipo":
+                    if huespedes >= 2 and huespedes > habitaciones and huespedes <= habitaciones*2:
+                        for room in rooms:
+                            if room[0] != 'Simple':
+                                res = Room(room[0], room[0], room[2], room[1])
+                                responseArray.append(res)
+                    elif huespedes > habitaciones*2:
+                        for room in rooms:
+                            if room[0] == 'Uso compartido':
+                                res = Room(room[0], room[0], room[2], room[1])
+                                responseArray.append(res)
+                    else:
                         for room in rooms:
                             res = Room(room[0], room[0], room[2], room[1])
                             responseArray.append(res)
-                    else: 
+                else: 
+                    if len(rooms) > habitaciones:
                         for room in rooms:
                             res = Room(room[0], room[1], room[3], room[2])
                             responseArray.append(res)
-                    return responseArray
-                else:
-                    print('No hay suficientes habitaciones disponibles')
+                    else:
+                        print('No hay suficientes habitaciones disponibles')
+                return responseArray        
         except Exception as e:
             raise
 
