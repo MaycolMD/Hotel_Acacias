@@ -88,13 +88,17 @@ class DATABASE:
             if tipo == "Uso compartido":
                 if rooms[0][0] >= 10 - int(cantidad) + 1:
                     print("No hay disponibilidad")
+                    return False
                 else:
                     print("Disponible")
+                    return True
             elif tipo == "Simple" or tipo == "Doble":
                 if rooms[0][0] >= 15 - int(cantidad) + 1:
                     print("No hay disponibilidad")
+                    return False
                 else:
                     print("Disponible")
+                    return True
         except Exception as e:
             raise
 
@@ -204,8 +208,10 @@ class DATABASE:
 
             if park[0][0] >= 25:
                 print("No hay disponibilidad")
+                return False
             else:
                 print("Disponible")
+                return True
         except Exception as e:
             raise
 
@@ -254,8 +260,10 @@ class DATABASE:
 
             if mesa[0][0] >= 40 - int(cantidad) + 1:
                 print("No hay disponibilidad")
+                return False
             else:
                 print("Disponible")
+                return True
         except Exception as e:
             raise
     
@@ -275,8 +283,10 @@ class DATABASE:
 
             if asiento[0][0] >= 20 - int(cantidad) + 1:
                 print("No hay disponibilidad")
+                return False
             else:
                 print("Disponible")
+                return True
         except Exception as e:
             raise
     
@@ -409,6 +419,31 @@ class DATABASE:
             return responsive_item
         except Exception as e:
             raise
+    
+    def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad, hora, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS):
+        if(self.verificar_disponibilidad_habitacion(self, tipo, f_in, f_out, cantidad)):
+            print("éxito con la habitación")
+            if(self.verificar_disponibilidad_paro_armado(self, f_in, f_out) == False):
+                print("puede continuar, no hay paro armado")
+                if(self.verificar_disponibilidad_parqueadero(self, f_in, f_out)):
+                    print("éxito con el parqueadero")
+                    if(self.verificar_disponibilidad_transporte(self, hora, cantidad)):
+                        print("éxito con el transporte")
+                        if(self.verificar_disponibilidad_restaurante(self, hora, f_in, f_out, cantidad)):
+                            print("éxito con el restaurante")
+                            query = f"""INSERT INTO RESERVAS
+                                        (ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, FECHA_CHECKIN, FECHA_CHECKOUT)
+                                        VALUES
+                                        ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
+                            try:
+                                self.cursor.execute(query)
+                                self.cursor.fetchall()
+                            except Exception as e:
+                                raise
+
+
+
+
 
     def close(self):
         self.connection.close()
