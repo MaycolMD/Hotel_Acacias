@@ -13,7 +13,7 @@ from Room import Room
 class DATABASE:
     def __init__(self):
         self.connection = pymysql.connect(
-            host="localhost", user="root", password="maycol", db="hotel_acacias"
+            host="localhost", user="root", password="", db="hotel_acacias"
         )
 
         self.cursor = self.connection.cursor()

@@ -39,6 +39,11 @@ favDialog.addEventListener('close', (e) => {
     document.getElementById('ocp-mobile').innerHTML = document.querySelector('#num-adults').value+"-"+document.querySelector('#num-kids').value+'-'+document.querySelector('#num-babies').value
 });
 
+document.querySelector("#num-hab").addEventListener('change', (e)=> {
+    document.querySelector("#num-adults").value = document.querySelector("#num-hab").value
+    document.querySelector("#num-kids").value = 0
+    document.querySelector("#num-babies").value = 0
+})
 var className = "inverted";
 var scrollTrigger = 60;
 
@@ -64,20 +69,7 @@ document.querySelector('.reservation-bar').querySelector('button').addEventListe
     window.location = dir;
 })
 
-document.getElementById('filter-button').addEventListener('click', (e) => {
-    const startDate = document.querySelector('#start-date').value;
-    const endDate = document.querySelector('#end-date').value;
-    const hab = document.querySelector('#num-hab').value;
-    const adults = document.querySelector('#num-adults').value;
-    const kids = document.querySelector('#num-kids').value;
-    const babies = document.querySelector('#num-babies').value;
-    const type = document.querySelector('#habitacionSelect').value; // Obtener el valor seleccionado del combobox
 
-    const dir = `search?tipo=${type}&fechaInicio=${startDate}&fechaFin=${endDate}&adultos=${adults}&niños=${kids}&bebes=${babies}&habitaciones=${hab}`;
-
-    // Recarga la página con la nueva URL
-    window.location = dir;
-  });
   
 
 
