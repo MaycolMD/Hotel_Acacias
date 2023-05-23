@@ -312,7 +312,6 @@ class DATABASE:
                         AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         AND TIPO = "{tipo}")
                     AND TIPO = "{tipo}";"""
-
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
@@ -324,7 +323,7 @@ class DATABASE:
                 if len(rooms) > habitaciones:
                     responseArray = []
                     for room in rooms:
-                        res = Room(room[0], room[1], room[2], room[3])
+                        res = Room(room[0], room[1], room[3], room[2])
                         responseArray.append(res)
                     return responseArray
                 else:

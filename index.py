@@ -119,8 +119,8 @@ def buscador():
         else:
             response = Response(
                 "failed", [], "No hay habitaciones")
-    except:
-        response = Response("failed", [], "Error al comunicarse con la DB")
+    except Exception as e:
+        response = Response("failed", [], "Error al comunicarse con la DB: "+str(e))
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
 if __name__ == '__main__':
