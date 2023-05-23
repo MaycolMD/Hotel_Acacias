@@ -9,7 +9,7 @@ from Paro import Paro
 from reserva import Reserva
 from response import Response
 from Room import Room
-
+from countType import CountType
 
 class DATABASE:
     def __init__(self):
@@ -313,15 +313,41 @@ class DATABASE:
         # Buscador
     
     def getHabitaciones(self, tipo, f_in, f_out, huespedes, habitaciones):
-        query = f"""SELECT *
-                    FROM hotel_acacias.INVENTARIO_HABITACION
-                    WHERE ID_HABITACION NOT IN
-                        (SELECT I.`ID_HABITACION`
-                        FROM hotel_acacias.RESERVAS R CROSS JOIN hotel_acacias.INVENTARIO_HABITACION I
-                        ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
-                        AND TIPO = "{tipo}")
-                    AND TIPO = "{tipo}";"""
+        if tipo == "Seleccionar tipo":
+            query = f"""SELECT
+                            I.`TIPO` AS tipo,
+                            COUNT(*) AS cantidad,
+                            I.`DESCRIPCION` AS descripcion
+                        FROM
+                            hotel_acacias.inventario_habitacion I
+                        WHERE
+                            I.`ID_HABITACION` NOT IN (
+                                SELECT 
+                                    R.`ID_HABITACION`
+                                FROM
+                                    hotel_acacias.RESERVAS R
+                                        CROSS JOIN
+                                    hotel_acacias.INVENTARIO_HABITACION IH ON R.ID_HABITACION = IH.ID_HABITACION
+                                WHERE
+                                    (R.`FECHA_CHECKIN` >= '{f_in}'
+                                    AND R.`FECHA_CHECKOUT` <= '{f_out}')
+                            )
+                        GROUP BY
+                            I.`TIPO`,
+                            I.`DESCRIPCION`;
+                    """
+        else:  
+            query = f"""SELECT *
+                        FROM INVENTARIO_HABITACION
+                        WHERE ID_HABITACION NOT IN
+                            (SELECT I.`ID_HABITACION`
+                            FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
+                            ON R.ID_HABITACION = I.ID_HABITACION
+                            AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                            AND TIPO = "{tipo}")
+                        AND TIPO = "{tipo}";
+                    """
+            
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
@@ -332,9 +358,14 @@ class DATABASE:
             else:
                 if len(rooms) > habitaciones:
                     responseArray = []
-                    for room in rooms:
-                        res = Room(room[0], room[1], room[3], room[2])
-                        responseArray.append(res)
+                    if tipo == "Seleccionar tipo":
+                        for room in rooms:
+                            res = Room(room[0], room[0], room[2], room[1])
+                            responseArray.append(res)
+                    else: 
+                        for room in rooms:
+                            res = Room(room[0], room[1], room[3], room[2])
+                            responseArray.append(res)
                     return responseArray
                 else:
                     print('No hay suficientes habitaciones disponibles')
@@ -436,14 +467,25 @@ class DATABASE:
                                         VALUES
                                         ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
                             try:
-                                self.cursor.execute(query)
-                                self.cursor.fetchall()
-                            except Exception as e:
-                                raise
+                                # Create a cursor object to execute SQL queries
+                                cursor = self.connection.cursor()
 
+                                # SQL statement to insert the strike alert into the database
+                                print("éxito con el restaurante")
+                                query = f"""INSERT INTO RESERVAS
+                                        (ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, FECHA_CHECKIN, FECHA_CHECKOUT)
+                                        VALUES
+                                        ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
+                                # Execute the SQL statement with the provided parameters
+                                cursor.execute(query)
 
+                                # Commit the changes to the database
+                                self.connection.commit()
 
+                                return Response("ok", [], "")
 
+                            except pymysql.Error as e:
+                                return Response("ok", [], "Error al registrar la reserva: " + e)
 
     def close(self):
         self.connection.close()

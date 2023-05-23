@@ -58,8 +58,26 @@ document.querySelector('.reservation-bar').querySelector('button').addEventListe
     const adults = document.querySelector('#num-adults').value;
     const kids = document.querySelector('#num-kids').value;
     const babies = document.querySelector('#num-babies').value;
-    const type = 'Simple'
+    const type = 'Seleccionar tipo';
     // build str so the button works
     const dir = `search?tipo=${type}&fechaInicio=${startDate}&fechaFin=${endDate}&adultos=${adults}&niños=${kids}&bebes=${babies}&habitaciones=${hab}`
     window.location = dir;
 })
+
+
+const tipoHabitacionSelect = document.querySelector('#habitacionSelect');
+
+tipoHabitacionSelect.addEventListener('change', () => {
+  const startDate = document.querySelector('#start-date').value;
+  const endDate = document.querySelector('#end-date').value;
+  const hab = document.querySelector('#num-hab').value;
+  const adults = document.querySelector('#num-adults').value;
+  const kids = document.querySelector('#num-kids').value;
+  const babies = document.querySelector('#num-babies').value;
+  const type = tipoHabitacionSelect.value;
+
+  const dir = `search?tipo=${type}&fechaInicio=${startDate}&fechaFin=${endDate}&adultos=${adults}&niños=${kids}&bebes=${babies}&habitaciones=${hab}`;
+
+  window.location = dir;
+});
+
