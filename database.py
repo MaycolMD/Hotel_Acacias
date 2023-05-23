@@ -14,7 +14,7 @@ from Room import Room
 class DATABASE:
     def __init__(self):
         self.connection = pymysql.connect(
-            host="localhost", user="root", password="maycol", db="hotel_acacias"
+            host="localhost", user="root", password="", db="hotel_acacias"
         )
 
         self.cursor = self.connection.cursor()
@@ -77,19 +77,21 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "{tipo}");"""
 
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
             if tipo == "Uso compartido":
-                if rooms[0][0] >= 10 - cantidad + 1:
+                if rooms[0][0] >= 10 - int(cantidad) + 1:
                     print("No hay disponibilidad")
                 else:
                     print("Disponible")
-            elif tipo == "Simple" | tipo == "Doble":
-                if rooms[0][0] >= 15 - cantidad + 1:
+            elif tipo == "Simple" or tipo == "Doble":
+                if rooms[0][0] >= 15 - int(cantidad) + 1:
                     print("No hay disponibilidad")
                 else:
                     print("Disponible")
@@ -103,14 +105,16 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "Uso compartido");"""
 
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
 
-            if rooms[0][0] >= 10 - cantidad + 1:
+            if rooms[0][0] >= 10 - int(cantidad) + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -124,14 +128,16 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "Simple");"""
 
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
 
-            if rooms[0][0] >= 15 - cantidad + 1:
+            if rooms[0][0] >= 15 - int(cantidad) + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -145,14 +151,16 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "Doble");"""
 
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
 
-            if rooms[0][0] >= 15 - cantidad + 1:
+            if rooms[0][0] >= 15 - int(cantidad) + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -167,7 +175,7 @@ class DATABASE:
             # SQL statement to insert the strike alert into the database
             sql = "INSERT INTO paros (start_date, end_date, context) VALUES (%s, %s, %s)"
             start_date = datetime.strptime(f_in, '%Y-%d-%m').date()
-            end_date = datetime.strptime(f_in, '%Y-%d-%m').date()
+            end_date = datetime.strptime(f_out, '%Y-%d-%m').date()
             # Execute the SQL statement with the provided parameters
             cursor.execute(sql, (start_date, end_date, context))
 
@@ -186,7 +194,9 @@ class DATABASE:
                         (SELECT P.ID_PARQUEADERO
                         FROM RESERVAS R CROSS JOIN PARQUEADERO P
                         ON R.`ID_RESERVA` = P.`ID_RESERVA`
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"));"""
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")));"""
 
         try:
             self.cursor.execute(query)
@@ -225,6 +235,7 @@ class DATABASE:
             return responseArray
         except Exception as e:
             raise
+
     def verificar_disponibilidad_restaurante(self, hora, f_in, f_out, cantidad):
         query = f"""SELECT COUNT(ID_MESA)
                     FROM RESTAURANTE
@@ -232,14 +243,16 @@ class DATABASE:
                         (SELECT RE.`ID_MESA`
                         FROM RESERVAS R CROSS JOIN RESTAURANTE RE
                         ON R.ID_RESERVA = RE.ID_RESERVA
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
-                        AND RE.HORARIO = "{hora}");"""
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")
+                        AND RE.HORARIO = "{hora}"));"""
 
         try:
             self.cursor.execute(query)
             mesa = self.cursor.fetchall()
 
-            if mesa[0][0] >= 40 - cantidad + 1:
+            if mesa[0][0] >= 40 - int(cantidad) + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -260,7 +273,7 @@ class DATABASE:
             self.cursor.execute(query)
             asiento = self.cursor.fetchall()
 
-            if asiento[0][0] >= 20 - cantidad + 1:
+            if asiento[0][0] >= 20 - int(cantidad) + 1:
                 print("No hay disponibilidad")
             else:
                 print("Disponible")
@@ -288,6 +301,7 @@ class DATABASE:
             raise
 
         # Buscador
+    
     def getHabitaciones(self, tipo, f_in, f_out, huespedes, habitaciones):
         query = f"""SELECT *
                     FROM hotel_acacias.INVENTARIO_HABITACION
@@ -315,6 +329,85 @@ class DATABASE:
                     return responseArray
                 else:
                     print('No hay suficientes habitaciones disponibles')
+        except Exception as e:
+            raise
+
+    def contar_disponibilidad_habitaciones(self, tipo, f_in, f_out):
+        query = f"""SELECT COUNT(`ID_HABITACION`)
+                    FROM INVENTARIO_HABITACION
+                    WHERE TIPO = "{tipo}" 
+                    AND NOT `ID_HABITACION` IN
+                        (SELECT I.`ID_HABITACION`
+                        FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
+                        ON R.ID_HABITACION = I.ID_HABITACION
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
+                        AND TIPO = "{tipo}")"""
+        try:
+            self.cursor.execute(query)
+            rooms = self.cursor.fetchall()
+            responsive_item = rooms[0][0]
+            print(responsive_item)
+            return responsive_item
+        except Exception as e:
+            raise
+
+    def contar_disponibilidad_parqueadero(self, f_in, f_out):
+        query = f"""SELECT COUNT(`ID_PARQUEADERO`)
+                    FROM PARQUEADERO
+                    WHERE `ID_PARQUEADERO` IN
+                        (SELECT P.`ID_PARQUEADERO`
+                        FROM RESERVAS R CROSS JOIN PARQUEADERO P
+                        ON R.`ID_RESERVA` = P.ID_RESERVA
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")))"""
+        try:
+            self.cursor.execute(query)
+            park = self.cursor.fetchall()
+            responsive_item = 25 - park[0][0]
+            print(responsive_item)
+            return responsive_item
+        except Exception as e:
+            raise
+
+    def contar_disponibilidad_restaurante(self, horario, f_in, f_out):
+        query = f"""SELECT COUNT(`ID_MESA`)
+                    FROM RESTAURANTE
+                    WHERE `ID_MESA` IN
+                        (SELECT RE.`ID_MESA`
+                        FROM RESERVAS R CROSS JOIN RESTAURANTE RE
+                        ON R.`ID_RESERVA` = RE.ID_RESERVA
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
+                        AND RE.`HORARIO` = "{horario}");"""
+        
+        try:
+            self.cursor.execute(query)
+            mesa = self.cursor.fetchall()
+            responsive_item = 40 - mesa[0][0]
+            print(responsive_item)
+            return responsive_item
+        except Exception as e:
+            raise
+
+    def contar_disponibilidad_transporte(self, hora):
+        query = f"""SELECT COUNT(ID_BUS)
+                    FROM TRANSPORTE
+                    WHERE ID_BUS IN
+                        (SELECT B.`ID_BUS`
+                        FROM RESERVAS R CROSS JOIN TRANSPORTE B
+                        ON R.ID_RESERVA = B.ID_RESERVA
+                        AND B.HORARIO = "{hora}");"""
+
+        try:
+            self.cursor.execute(query)
+            asiento = self.cursor.fetchall()
+            responsive_item = 20 - asiento[0][0]
+            print(responsive_item)
+            return responsive_item
         except Exception as e:
             raise
 
