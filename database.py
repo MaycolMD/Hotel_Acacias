@@ -475,8 +475,11 @@ class DATABASE:
 
         try:
             self.cursor.execute(query)
-            rooms = self.cursor.fetchall()
-            return rooms[0][0]
+            id = self.cursor.fetchall()
+            responseArray = []
+            guest = id[0]
+            responseArray.append(guest)
+            return responseArray
         except Exception as e:
             raise
     

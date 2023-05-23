@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, request
 from flask_mysqldb import MySQL
-from datetime import datetime
+
 import json
 from flask_cors import CORS
 from database import DATABASE
@@ -121,6 +121,20 @@ def buscador():
                 "failed", [], "No hay habitaciones")
     except Exception as e:
         response = Response("failed", [], "Error al comunicarse con la DB: "+str(e))
+    return json.dumps(response, default=vars), {"Content-Type": "application/json"}
+
+@app.route('/api/obtenerid')
+def obtener_id():
+    db = DATABASE()
+    try:
+        id = db.verificar_id_habitacion()
+        if len(id) > 0:
+            response = Response("ok", id, "")
+        else:
+            response = Response(
+                "failed", [], "No hay disponibilidad")
+    except:
+        response = Response("failed", [], "Error al comunicarse con la DB")
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
 if __name__ == '__main__':
