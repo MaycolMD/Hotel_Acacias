@@ -461,10 +461,10 @@ class DATABASE:
         except Exception as e:
             raise
     
-    def verificar_id_habitacion(self, tipo, f_in, f_out, cantidad):
+    def verificar_id_habitacion(self, tipo, f_in, f_out):
         query = f"""SELECT MIN(ID_HABITACION)
                     FROM INVENTARIO_HABITACION
-                    WHERE TIPO = "Uso compartido"
+                    WHERE TIPO = "{tipo}"
                     AND NOT `ID_HABITACION` IN
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
