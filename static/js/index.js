@@ -39,6 +39,11 @@ favDialog.addEventListener('close', (e) => {
     document.getElementById('ocp-mobile').innerHTML = document.querySelector('#num-adults').value+"-"+document.querySelector('#num-kids').value+'-'+document.querySelector('#num-babies').value
 });
 
+document.querySelector("#num-hab").addEventListener('change', (e)=> {
+    document.querySelector("#num-adults").value = document.querySelector("#num-hab").value
+    document.querySelector("#num-kids").value = 0
+    document.querySelector("#num-babies").value = 0
+})
 var className = "inverted";
 var scrollTrigger = 60;
 

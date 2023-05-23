@@ -341,16 +341,20 @@ footer {
   width: -webkit-fill-available;
 }
 .accordion {
-  background-color: #eee;
+  background-color: var(--secondary-color);
+  font-family: Inter, sans-serif;
   color: #444;
   cursor: pointer;
   padding: 18px;
   width: 100%;
   border: none;
   text-align: left;
+  font-weight: bold;
   outline: none;
   font-size: 15px;
   transition: 0.4s;
+  margin: 10px 0 10px 0;
+  border-radius: 30px;
 }
 .active, .accordion:hover {
   background-color: #ccc; 
@@ -360,6 +364,8 @@ footer {
   display: none;
   background-color: white;
   overflow: hidden;
+  transition: max-height 0.2s ease-out;
+
 }
 .panel input {
   display: block;
@@ -370,4 +376,15 @@ footer {
 }
 #submit-btn {
   margin-top: 10px;
+}
+.accordion:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
 }

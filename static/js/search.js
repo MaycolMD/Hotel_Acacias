@@ -1,4 +1,15 @@
 import API from "./API.js";
+let params = new URLSearchParams(window.location.search);
+const fechaInicio = params.get('fechaInicio');
+const fechafin = params.get('fechaFin');
+const adultos = params.get('adultos');
+const niños = params.get('niños');
+const bebes = params.get('bebes');
+const hab = params.get('habitaciones')
+const tipo = params.get('tipo');
+const dir = (type) => {
+    return`booking?tipo=${type}&fechaInicio=${fechaInicio}&fechaFin=${fechafin}&adultos=${adultos}&niños=${niños}&bebes=${bebes}&habitaciones=${hab}`;
+} 
 const roomCardTemplate = (tipo, desc, precio) => {
     return `
     <div class="room-card">
@@ -8,7 +19,7 @@ const roomCardTemplate = (tipo, desc, precio) => {
     <div class="room-card-section2">
         <h1>${tipo}</h1>
         <p>${desc}</p>
-        <button class="button-default">Reservar</button>
+        <a href="${dir(tipo)}"><button class="button-default">Reservar</button></a>
     </div>
     <div class="room-card-section3">
         <span>${precio}</span>
@@ -22,14 +33,7 @@ const syncWithMobile = () => {
     document.getElementById('end-date-mobile').value = document.getElementById('end-date').value
 }
 window.onload = () => {
-    let params = new URLSearchParams(window.location.search);
-    const tipo = params.get('tipo');
-    const fechaInicio = params.get('fechaInicio');
-    const fechafin = params.get('fechaFin');
-    const adultos = params.get('adultos');
-    const niños = params.get('niños');
-    const bebes = params.get('bebes');
-    const hab = params.get('habitaciones')
+    
     const api = new API();
     api.getHabitaciones(tipo, fechaInicio, fechafin, adultos, niños, bebes, hab).then((data) =>
         data.content.forEach(element => {
