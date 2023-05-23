@@ -461,6 +461,25 @@ class DATABASE:
         except Exception as e:
             raise
     
+    def verificar_id_habitacion(self, tipo, f_in, f_out, cantidad):
+        query = f"""SELECT MIN(ID_HABITACION)
+                    FROM INVENTARIO_HABITACION
+                    WHERE TIPO = "Uso compartido"
+                    AND NOT `ID_HABITACION` IN
+                        (SELECT I.`ID_HABITACION`
+                        FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
+                        ON R.ID_HABITACION = I.ID_HABITACION
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
+                        OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")));"""
+
+        try:
+            self.cursor.execute(query)
+            rooms = self.cursor.fetchall()
+            return rooms[0][0]
+        except Exception as e:
+            raise
+    
     def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad_habitacion, cantidad_restaurante, cantidad_transporte, hora_restaurante, hora_bus, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, parqueadero, restaurante, transporte):
         if(not self.verificar_disponibilidad_habitacion(tipo, f_in, f_out, cantidad_habitacion)):
             print("No hay habitaciones disponibles")
