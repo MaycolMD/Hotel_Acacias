@@ -64,8 +64,7 @@ document.querySelector('.reservation-bar').querySelector('button').addEventListe
     window.location = dir;
 })
 
-
-document.querySelector('.wrapper').querySelector('.input-default').addEventListener('change', () => {
+document.getElementById('filter-button').addEventListener('click', (e) => {
     const startDate = document.querySelector('#start-date').value;
     const endDate = document.querySelector('#end-date').value;
     const hab = document.querySelector('#num-hab').value;
@@ -77,7 +76,7 @@ document.querySelector('.wrapper').querySelector('.input-default').addEventListe
     const dir = `search?tipo=${type}&fechaInicio=${startDate}&fechaFin=${endDate}&adultos=${adults}&niños=${kids}&bebes=${babies}&habitaciones=${hab}`;
 
     // Recarga la página con la nueva URL
-    window.location.href = dir;
+    window.location = dir;
   });
   
 
