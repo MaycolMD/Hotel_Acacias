@@ -50,3 +50,16 @@ window.onscroll = function() {
     document.getElementsByTagName("header")[0].classList.remove(className);
   }
 };
+// search bar desktop
+document.querySelector('.reservation-bar').querySelector('button').addEventListener('click', (e)=> {
+    const startDate = document.querySelector('#start-date').value;
+    const endDate = document.querySelector('#end-date').value;
+    const hab = document.querySelector('#num-hab').value;
+    const adults = document.querySelector('#num-adults').value;
+    const kids = document.querySelector('#num-kids').value;
+    const babies = document.querySelector('#num-babies').value;
+    const type = 'Simple'
+    // build str so the button works
+    const dir = `search?tipo=${type}&fechaInicio=${startDate}&fechaFin=${endDate}&adultos=${adults}&niños=${kids}&bebes=${babies}&habitaciones=${hab}`
+    window.location = dir;
+})

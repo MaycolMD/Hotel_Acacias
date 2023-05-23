@@ -14,7 +14,7 @@ from Room import Room
 class DATABASE:
     def __init__(self):
         self.connection = pymysql.connect(
-            host="localhost", user="root", password="maycol", db="hotel_acacias"
+            host="localhost", user="root", password="", db="hotel_acacias"
         )
 
         self.cursor = self.connection.cursor()
@@ -298,7 +298,6 @@ class DATABASE:
                         AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         AND TIPO = "{tipo}")
                     AND TIPO = "{tipo}";"""
-
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
@@ -310,7 +309,7 @@ class DATABASE:
                 if len(rooms) > habitaciones:
                     responseArray = []
                     for room in rooms:
-                        res = Room(room[0], room[1], room[2], room[3])
+                        res = Room(room[0], room[1], room[3], room[2])
                         responseArray.append(res)
                     return responseArray
                 else:
