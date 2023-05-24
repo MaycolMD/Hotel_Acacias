@@ -148,7 +148,7 @@ def obtener_id():
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
 @app.route('/api/reservar')
-def obtener_id():
+def reservar():
     db = DATABASE()
     tipo = request.args.get('tipo')
     f_in = request.args.get('fechaInicio')

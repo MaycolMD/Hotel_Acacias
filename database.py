@@ -10,6 +10,7 @@ from reserva import Reserva
 from response import Response
 from Room import Room
 
+
 class DATABASE:
     def __init__(self):
         self.connection = pymysql.connect(
@@ -76,7 +77,7 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "{tipo}");"""
@@ -108,7 +109,7 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "Uso compartido");"""
@@ -131,7 +132,7 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "Simple");"""
@@ -154,7 +155,7 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "Doble");"""
@@ -197,7 +198,7 @@ class DATABASE:
                         (SELECT P.ID_PARQUEADERO
                         FROM RESERVAS R CROSS JOIN PARQUEADERO P
                         ON R.`ID_RESERVA` = P.`ID_RESERVA`
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")));"""
 
@@ -235,7 +236,8 @@ class DATABASE:
             huespedes = self.cursor.fetchall()
             responseArray = []
             for huesped in huespedes:
-                guest = Huesped(huesped[0], huesped[1],huesped[2], huesped[3], huesped[4])
+                guest = Huesped(huesped[0], huesped[1],
+                                huesped[2], huesped[3], huesped[4])
                 responseArray.append(guest)
             return responseArray
         except Exception as e:
@@ -248,7 +250,7 @@ class DATABASE:
                         (SELECT RE.`ID_MESA`
                         FROM RESERVAS R CROSS JOIN RESTAURANTE RE
                         ON R.ID_RESERVA = RE.ID_RESERVA
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")
                         AND RE.HORARIO = "{hora}"));"""
@@ -265,7 +267,7 @@ class DATABASE:
                 return True
         except Exception as e:
             raise
-    
+
     # Hora esta en el formato datetime (YY-MM-DD HH-MM-SS)
     def verificar_disponibilidad_transporte(self, hora, cantidad):
         query = f"""SELECT COUNT(ID_BUS)
@@ -288,7 +290,7 @@ class DATABASE:
                 return True
         except Exception as e:
             raise
-    
+
     # Validate case of armed strike
     def verificar_disponibilidad_paro_armado(self, f_inicio, f_fin):
         query = f"SELECT inicio, fin FROM paros"
@@ -310,7 +312,7 @@ class DATABASE:
             raise
 
         # Buscador
-    
+
     def getHabitaciones(self, tipo, f_in, f_out, huespedes, habitaciones):
         if tipo == "Seleccionar tipo":
             query = f"""SELECT
@@ -321,7 +323,7 @@ class DATABASE:
                             hotel_acacias.inventario_habitacion I
                         WHERE
                             I.`ID_HABITACION` NOT IN (
-                                SELECT 
+                                SELECT
                                     R.`ID_HABITACION`
                                 FROM
                                     hotel_acacias.RESERVAS R
@@ -335,7 +337,7 @@ class DATABASE:
                             I.`TIPO`,
                             I.`DESCRIPCION`;
                     """
-        else:  
+        else:
             query = f"""SELECT *
                         FROM INVENTARIO_HABITACION
                         WHERE ID_HABITACION NOT IN
@@ -346,12 +348,13 @@ class DATABASE:
                             AND TIPO = "{tipo}")
                         AND TIPO = "{tipo}";
                     """
-            
+
         try:
             self.cursor.execute(query)
             rooms = self.cursor.fetchall()
             if tipo == "Simple" and huespedes > habitaciones:
-                print('No hay suficientes habitaciones de cama simple para los huespedes')
+                print(
+                    'No hay suficientes habitaciones de cama simple para los huespedes')
             elif tipo == "Doble" and huespedes > habitaciones*2:
                 print('No hay suficientes habitaciones de cama doble para los huespedes')
             else:
@@ -371,26 +374,26 @@ class DATABASE:
                         for room in rooms:
                             res = Room(room[0], room[0], room[2], room[1])
                             responseArray.append(res)
-                else: 
+                else:
                     if len(rooms) > habitaciones:
                         for room in rooms:
                             res = Room(room[0], room[1], room[3], room[2])
                             responseArray.append(res)
                     else:
                         print('No hay suficientes habitaciones disponibles')
-                return responseArray        
+                return responseArray
         except Exception as e:
             raise
 
     def contar_disponibilidad_habitaciones(self, tipo, f_in, f_out):
         query = f"""SELECT COUNT(`ID_HABITACION`)
                     FROM INVENTARIO_HABITACION
-                    WHERE TIPO = "{tipo}" 
+                    WHERE TIPO = "{tipo}"
                     AND NOT `ID_HABITACION` IN
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND TIPO = "{tipo}")"""
@@ -410,7 +413,7 @@ class DATABASE:
                         (SELECT P.`ID_PARQUEADERO`
                         FROM RESERVAS R CROSS JOIN PARQUEADERO P
                         ON R.`ID_RESERVA` = P.ID_RESERVA
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")))"""
         try:
@@ -429,11 +432,11 @@ class DATABASE:
                         (SELECT RE.`ID_MESA`
                         FROM RESERVAS R CROSS JOIN RESTAURANTE RE
                         ON R.`ID_RESERVA` = RE.ID_RESERVA
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}"))
                         AND RE.`HORARIO` = "{horario}");"""
-        
+
         try:
             self.cursor.execute(query)
             mesa = self.cursor.fetchall()
@@ -460,7 +463,7 @@ class DATABASE:
             return responsive_item
         except Exception as e:
             raise
-    
+
     def verificar_id_habitacion(self, tipo, f_in, f_out):
         query = f"""SELECT MIN(ID_HABITACION)
                     FROM INVENTARIO_HABITACION
@@ -469,7 +472,7 @@ class DATABASE:
                         (SELECT I.`ID_HABITACION`
                         FROM RESERVAS R CROSS JOIN INVENTARIO_HABITACION I
                         ON R.ID_HABITACION = I.ID_HABITACION
-                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}" 
+                        AND (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}"
                         OR (R.`FECHA_CHECKIN` <= "{f_in}" AND R.`FECHA_CHECKOUT` <= "{f_out}")
                         OR (R.`FECHA_CHECKIN` >= "{f_in}" AND R.`FECHA_CHECKOUT` >= "{f_out}")));"""
 
@@ -477,13 +480,15 @@ class DATABASE:
             self.cursor.execute(query)
             id = self.cursor.fetchall()
             responseArray = []
-            guest = {'id':id[0]}
+            guest = {'id': id[0]}
             responseArray.append(guest)
             return guest
         except Exception as e:
             raise
-    
+
     def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad_habitacion, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS):
+        start_date = datetime.strptime(f_in, '%Y-%d-%m').date()
+        end_date = datetime.strptime(f_out, '%Y-%d-%m').date()
         if(not self.verificar_disponibilidad_habitacion(tipo, f_in, f_out, cantidad_habitacion)):
             print("No hay habitaciones disponibles")
             return
@@ -495,7 +500,7 @@ class DATABASE:
         query = f"""INSERT INTO RESERVAS
                     (ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, FECHA_CHECKIN, FECHA_CHECKOUT)
                     VALUES
-                    ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{f_in}", "{f_out}");"""
+                    ("{ID_CLIENTE}", "{ID_HABITACION}", "{NACIONALIDAD}", "{ORIGEN}", "{NOMBRES}", "{APELLIDOS}", "{start_date}", "{end_date}");"""
         try:
             self.cursor.execute(query)
             self.connection.commit()
