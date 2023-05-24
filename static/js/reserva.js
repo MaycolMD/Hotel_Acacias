@@ -7,6 +7,9 @@ const bebes = params.get('bebes');
 const hab = params.get('habitaciones')
 const tipo = params.get('tipo');
 
+import API from "./API.js";
+
+
 const renderGuest = (n) => {
     return `
     <label for="nombre-${n}">Nombre:</label>
@@ -240,7 +243,16 @@ window.onload = () => {
     }
     setAccordions()
 }
-
+document.querySelectorAll("button.button-default")[1].addEventListener('click', (e) => {
+    alert("hola")
+    const api = new API();
+    let id = 0
+    api.assignID(fechaInicio,fechafin,tipo).then((data) => {
+        id = data.content.id[0]
+        console.log(id)
+    })
+    e.preventDefault();
+})
 const setAccordions = () => {
     var acc = document.getElementsByClassName("accordion");
     var i;

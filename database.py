@@ -477,9 +477,9 @@ class DATABASE:
             self.cursor.execute(query)
             id = self.cursor.fetchall()
             responseArray = []
-            guest = id[0]
+            guest = {'id':id[0]}
             responseArray.append(guest)
-            return responseArray
+            return guest
         except Exception as e:
             raise
     

@@ -50,4 +50,14 @@ export default class API{
         const response = await fetch(path,options)
         return response.json();
     }
+    async assignID(fechaInicio,fechaFin,tipo) {
+        const path = `${this.url}obtenerid?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&tipo=${tipo}`
+        const options = {
+            headers: {
+              Accept: 'application/json'
+            }
+        };
+        const response = await fetch(path,options)
+        return response.json();        
+    }
 }
