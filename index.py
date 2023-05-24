@@ -147,6 +147,36 @@ def obtener_id():
         response = Response("failed", [], "Error al comunicarse con la DB")
     return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
+@app.route('/api/reservar')
+def obtener_id():
+    db = DATABASE()
+    tipo = request.args.get('tipo')
+    f_in = request.args.get('fechaInicio')
+    f_out = request.args.get('fechaFin')
+    cantidad_habitacion = int(request.args.get('habitaciones'))
+    cantidad_restaurante = int(request.args.get(''))
+    cantidad_transporte = int(request.args.get('habitaciones'))
+    hora_restaurante = request.args.get('')
+    hora_bus = request.args.get('')
+    ID_CLIENTE = int(request.args.get(''))
+    ID_HABITACION = int(request.args.get(''))
+    NACIONALIDAD = request.args.get('')
+    ORIGEN = request.args.get('')
+    NOMBRES = request.args.get('')
+    APELLIDOS = request.args.get('')
+    parqueadero = request.args.get('')
+    restaurante = request.args.get('') 
+    transporte = request.args.get('')
+    try:
+        reserva = db.ingresar_datos_reserva(tipo, f_in, f_out, cantidad_habitacion, cantidad_restaurante, cantidad_transporte, hora_restaurante, hora_bus, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, parqueadero, restaurante, transporte)
+        if len(reserva) > 0:
+            response = Response("ok", reserva, "")
+        else:
+            response = Response(
+                "failed", [], "No hay disponibilidad")
+    except:
+        response = Response("failed", [], "Error al comunicarse con la DB")
+    return json.dumps(response, default=vars), {"Content-Type": "application/json"}
 
 if __name__ == '__main__':
     app.run(debug=True)
