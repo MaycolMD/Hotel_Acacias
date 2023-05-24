@@ -252,7 +252,7 @@ document.querySelectorAll("button.button-default")[1].addEventListener('click', 
         id = data.content.id[0]
         console.log(id)
         for (let index = 0; index < guestNum; index++) {
-            const fields = ['nombres-'+(index+1),'apellido-'+(index+1),'pais-'+(index+1),'origen-'+(index+1),'identificacion-'+(index+1)]
+            const fields = [document.querySelector('#nombres-'+(index+1)).value,document.querySelector('#apellido-'+(index+1)).value,document.querySelector('#pais-'+(index+1)).value,document.querySelector('#origen-'+(index+1)).value,document.querySelector('#identificacion-'+(index+1)).value]
             api.reservar(tipo,fechaInicio,fechafin,hab,fields[4], id,fields[2],fields[3],fields[0],fields[1]).then((data)=>{
                 if(data.response=="ok") {
                     alert("reservado")
