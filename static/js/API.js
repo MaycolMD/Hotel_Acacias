@@ -60,4 +60,14 @@ export default class API{
         const response = await fetch(path,options)
         return response.json();        
     }
+    async reservar(tipo,fechaInicio,fechaFin,habitaciones,id_cliente,id_hab,nacionalidad,origen,nombres,apellidos) {
+        const path = `${this.url}reservar?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&tipo=${tipo}&habitaciones=${habitaciones}&id_cliente=${id_cliente}&id_hab=${id_hab}&nacionalidad=${nacionalidad}&origen=${origen}&nombres=${nombres}&apellidos=${apellidos}`
+        const options = {
+            headers: {
+              Accept: 'application/json'
+            }
+        };
+        const response = await fetch(path,options)
+        return response.json();     
+    }
 }

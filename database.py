@@ -483,7 +483,7 @@ class DATABASE:
         except Exception as e:
             raise
     
-    def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad_habitacion, cantidad_restaurante, cantidad_transporte, hora_restaurante, hora_bus, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS, parqueadero, restaurante, transporte):
+    def ingresar_datos_reserva(self, tipo, f_in, f_out, cantidad_habitacion, ID_CLIENTE, ID_HABITACION, NACIONALIDAD, ORIGEN, NOMBRES, APELLIDOS):
         if(not self.verificar_disponibilidad_habitacion(tipo, f_in, f_out, cantidad_habitacion)):
             print("No hay habitaciones disponibles")
             return
@@ -513,9 +513,6 @@ class DATABASE:
         except Exception as e:
             raise
 
-        self.ingresar_datos_parqueadero(id_reserva, f_in, f_out, parqueadero)
-        self.ingresar_datos_restaurante(id_reserva, hora_restaurante, f_in, f_out, cantidad_restaurante, restaurante)
-        self.ingresar_datos_transporte(id_reserva, hora_bus, cantidad_transporte, transporte)
 
     def ingresar_datos_parqueadero(self, id_reserva, f_in, f_out, check):
         if(not check):
